@@ -1,0 +1,40 @@
+<div class="container mt-4">
+  <h1 class="text-center">IoT Device Dashboard</h1>
+  <button class="btn btn-primary mb-3" (click)="addData({ name: 'Victor\'s esp8266', status: true, macAddress: 'C8:F0:9E:FB:5B:7C' })">
+    Add Device
+  </button>
+
+  <table class="table table-hover table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>ID</th>
+        <th>Device Name</th>
+        <th>Status</th>
+        <th>Mac Address</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of deviceData; let i = index">
+        <td>{{ data.id }}</td>
+        <td>{{ data.name }}</td>
+        <td>
+          <span [class.text-success]="data.status" [class.text-danger]="!data.status">
+            {{ data.status ? 'Connected' : 'Disconnected' }}
+          </span>
+        </td>
+        <td>{{ data.macAddress }}</td>
+        <td>
+          <button class="btn btn-warning btn-sm mb-3 me-2" (click)="deleteDevice(data.macAddress)">Delete</button>
+          <button class="btn btn-success btn-sm mb-3 me-2" (click)="ledControl({event: 'led', macAddress: data.macAddress, message: 'led-on'})">ON</button>
+          <button class="btn btn-danger btn-sm mb-3 me-2" (click)="ledControl({event: 'led', macAddress: data.macAddress, message: 'led-off'})">OFF</button>
+          <button class="btn btn-primary btn-sm mb-3 me-2" >Edit</button>
+
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
