@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -6,37 +6,48 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class IotService {
-  private apiUrlGetDevices = "http://0.0.0.0:1337/iot/get-all-devices";
-  private apiUrlAddDevice = "http://0.0.0.0:1337/iot/register";
-  private apiUrlUpdateDevice = "http://0.0.0.0:1337/iot/update-device";
-  private apiUrlDeleteDevice = "http://0.0.0.0:1337/iot/delete-device";
-  private apiUrlLedControl = "http://0.0.0.0:1337/iot/led-control";
+  private apiUrlGetDevices = "https://992b-212-0-203-46.ngrok-free.app/iot/get-all-devices";
+  private apiUrlAddDevice = "https://992b-212-0-203-46.ngrok-free.app/iot/register";
+  private apiUrlUpdateDevice = "https://992b-212-0-203-46.ngrok-free.app/iot/update-device";
+  private apiUrlDeleteDevice = "https://992b-212-0-203-46.ngrok-free.app/iot/delete-device";
+  private apiUrlLedControl = "https://992b-212-0-203-46.ngrok-free.app/iot/led-control";
 
   constructor(private http: HttpClient) { }
 
+  private createHeaders() {
+    return new HttpHeaders({
+      'ngrok-skip-browser-warning': 'true', // Bypass ngrok warning page
+      'Content-Type': 'application/json'
+    });
+  }
+
   getDevice(): Observable<any> {
-    return this.http.get<any>(this.apiUrlGetDevices);
+    const headers = this.createHeaders();
+    return this.http.get<any>(this.apiUrlGetDevices, { headers });
   }
 
   createDevice(data: any): Observable<any> {
-    return this.http.post<any>(this.apiUrlAddDevice, data);
+    const headers = this.createHeaders();
+    return this.http.post<any>(this.apiUrlAddDevice, data, { headers });
   }
 
   updateDevice(macAddress: string, data: string) {
     const url = `${this.apiUrlUpdateDevice}/${macAddress}`;
     const updateData = {
       deviceName: data,
-    }
-    console.log(updateData);
-    return this.http.patch<any>(url, updateData);
+    };
+    const headers = this.createHeaders();
+    return this.http.patch<any>(url, updateData, { headers });
   }
 
   deleteDevice(macAddress: string) {
     const url = `${this.apiUrlDeleteDevice}/${macAddress}`;
-    return this.http.delete<any>(url);
+    const headers = this.createHeaders();
+    return this.http.delete<any>(url, { headers });
   }
 
   ledControl(data: any) {
-    return this.http.post<any>(this.apiUrlLedControl, data);
+    const headers = this.createHeaders();
+    return this.http.post<any>(this.apiUrlLedControl, data, { headers });
   }
 }

@@ -1,6 +1,8 @@
 <div class="container mt-4">
+
   <h1 class="text-center">IoT Device Dashboard</h1>
-  <button class="btn btn-primary mb-3" (click)="addData({ name: 'Victor\'s esp8266', status: true, macAddress: 'C8:F0:9E:FB:5B:7C' })">
+  <button class="btn btn-primary mb-3"
+    (click)="addData({ name: 'Victor\'s esp8266', status: true, macAddress: 'C8:F0:9E:FB:5B:7C' })">
     Add Device
   </button>
 
@@ -26,9 +28,11 @@
         <td>{{ data.macAddress }}</td>
         <td>
           <button class="btn btn-warning btn-sm mb-3 me-2" (click)="deleteDevice(data.macAddress)">Delete</button>
-          <button class="btn btn-success btn-sm mb-3 me-2" (click)="ledControl({event: 'led', macAddress: data.macAddress, message: 'led-on'})">ON</button>
-          <button class="btn btn-danger btn-sm mb-3 me-2" (click)="ledControl({event: 'led', macAddress: data.macAddress, message: 'led-off'})">OFF</button>
-          <button class="btn btn-primary btn-sm mb-3 me-2" >Edit</button>
+          <button class="btn btn-success btn-sm mb-3 me-2"
+            (click)="ledControl({event: 'led', macAddress: data.macAddress, message: 'led-on'})">ON</button>
+          <button class="btn btn-danger btn-sm mb-3 me-2"
+            (click)="ledControl({event: 'led', macAddress: data.macAddress, message: 'led-off'})">OFF</button>
+          <button class="btn btn-primary btn-sm mb-3 me-2">Edit</button>
 
 
         </td>
@@ -36,5 +40,3 @@
     </tbody>
   </table>
 </div>
-
-

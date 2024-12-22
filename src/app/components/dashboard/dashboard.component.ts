@@ -1,8 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IotService } from '../../services/iot.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
+
 
 @Component({
   selector: 'app-dashboard',
@@ -11,17 +14,15 @@ import { HttpClientModule } from '@angular/common/http';
     CommonModule,
     FormsModule,
     HttpClientModule
-],
+  ],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-
   deviceData: any[] = [];
+  errorMessage: SafeHtml | null = null; // Change to SafeHtml
 
-  constructor(
-    private iotService: IotService
-  ) {  }
+  constructor(private sanitizer: DomSanitizer, private iotService: IotService) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -31,17 +32,19 @@ export class DashboardComponent implements OnInit {
     this.iotService.getDevice().subscribe({
       next: (data) => {
         this.deviceData = data;
+        this.errorMessage = ''; // Clear any previous error
+
       },
       error: (err) => {
         console.error('Error loading devices:', err);
-        // Poți afișa un mesaj de eroare utilizatorului, dacă este cazul
       },
+
+
       complete: () => {
         console.log('Device data loaded successfully.');
       }
     });
   }
-
 
   addData(newDeviceData: any) {
     this.iotService.createDevice(newDeviceData).subscribe(() => {
@@ -50,8 +53,9 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteDevice(macAddress: string) {
-    this.iotService.deleteDevice(macAddress).subscribe();
-    this.loadData();
+    this.iotService.deleteDevice(macAddress).subscribe(() => {
+      this.loadData();
+    });
   }
 
   ledControl(data: any) {
@@ -59,5 +63,4 @@ export class DashboardComponent implements OnInit {
       this.loadData();
     });
   }
-
 }
